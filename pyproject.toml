@@ -1,6 +1,6 @@
 [project]
 name = "cli-manager"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = [
     {name = "Sisung Kim",email = "sisung.kim1@gmail.com"}
@@ -11,5 +11,6 @@ dependencies = [
 ]
 
 [project.scripts]
-supercli_backend = "cli_manager.core:main"
-subcli = "cli_manager.subcli.core:main"
+supercli = "cli_manager.core:main"
+subcli1 = "cli_manager.subcli.sub1:main"
+subcli2 = "cli_manager.subcli.sub2:main"

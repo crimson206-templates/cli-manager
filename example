@@ -1,0 +1,37 @@
+# example completion (wrapper)
+__example_complete() {
+    local cur prev words cword
+    _init_completion || return
+    
+    # 첫 번째 인자로 가능한 CLI들
+    if [ "$cword" -eq 1 ]; then
+        COMPREPLY=( $(compgen -W "subcli1 subcli2" -- "$cur") )
+        return
+    fi
+    
+    # 첫 번째 인자에 따라 해당 CLI의 completion 사용
+    if [ "$cword" -gt 1 ]; then
+        local cmd="${words[1]}"
+        
+        # 현재 명령줄에서 example을 제거하고 실제 CLI부터 시작하도록 조정
+        local unwrapped_cmdline=("${words[@]:1}")
+        COMP_WORDS=("${unwrapped_cmdline[@]}")
+        COMP_CWORD=$((cword-1))
+        
+        case "$cmd" in
+            "subcli1")
+                _subcli1_complete
+                return
+                ;;
+            "subcli2")
+                _subcli2_complete
+                return
+                ;;
+        esac
+    fi
+    
+    # 다른 경우에는 기본 파일 completion
+    _filedir
+}
+
+complete -F __example_complete example

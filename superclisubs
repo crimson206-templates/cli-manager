@@ -1,0 +1,36 @@
+# META: {"backend":"supercli","source_cli":"supercli","wrapper_cli":"superclisubs"}
+
+# superclisubs completion (wrapper for supercli)
+__superclisubs_complete() {
+    local cur prev words cword
+    _init_completion || return
+    
+    if [ "$cword" -eq 1 ]; then
+        local registered_clis="subcli1 subcli2"
+        COMPREPLY=( $(compgen -W "$registered_clis" -- "$cur") )
+        return
+    fi
+    
+    if [ "$cword" -gt 1 ]; then
+        local cmd="${words[1]}"
+        if [[ " $registered_clis " =~ " $cmd " ]]; then
+            local unwrapped_cmdline=("${words[@]:1}")
+            COMP_WORDS=("${unwrapped_cmdline[@]}")
+            COMP_CWORD=$((cword-1))
+            
+            local backend_func=$(declare -F | grep "_${cmd}_complete" | head -1 | cut -d' ' -f3)
+            if [ -n "$backend_func" ]; then
+                $backend_func
+                return
+            fi
+            return
+        fi
+    fi
+    
+    local backend_func=$(declare -F | grep "_supercli_complete" | head -1 | cut -d' ' -f3)
+    if [ -n "$backend_func" ]; then
+        $backend_func
+    fi
+}
+
+complete -F __superclisubs_complete superclisubs
