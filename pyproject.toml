@@ -1,0 +1,15 @@
+[project]
+name = "cli-manager"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Sisung Kim",email = "sisung.kim1@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+]
+
+[project.scripts]
+supercli_backend = "cli_manager.core:main"
+subcli = "cli_manager.subcli.core:main"
